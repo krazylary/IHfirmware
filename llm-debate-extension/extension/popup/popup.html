@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 10px; font-family: sans-serif; }
+    h2 { margin-top: 0; }
+    .section { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    button { width: 100%; margin: 5px 0; padding: 8px; cursor: pointer; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .status { font-size: 12px; color: #666; }
+    .bind-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .bind-row span { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h2>LLM Debate Orchestrator</h2>
+
+  <div class="section">
+    <label>Current Tab Binding</label>
+    <div class="bind-row">
+      <span>Orchestrator (GPT-A)</span>
+      <button id="bind-orch">Bind</button>
+    </div>
+    <div class="bind-row">
+      <span>Debater (GPT-B)</span>
+      <button id="bind-gpt">Bind</button>
+    </div>
+    <div class="bind-row">
+      <span>Claude</span>
+      <button id="bind-claude">Bind</button>
+    </div>
+    <div class="bind-row">
+      <span>Gemini</span>
+      <button id="bind-gemini">Bind</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <label>Debate Control</label>
+    <input type="text" id="topic" placeholder="Enter Debate Topic" style="width: 100%; box-sizing: border-box; margin-bottom: 5px;">
+    <button id="start-debate" style="background-color: #4CAF50; color: white;">Start Debate</button>
+    <button id="stop-debate" style="background-color: #f44336; color: white;">Stop / Cancel</button>
+  </div>
+
+  <div class="section">
+    <label>Tools</label>
+    <button id="toggle-teach">Toggle Teach Mode</button>
+    <button id="toggle-debug">Toggle Debug Overlay</button>
+  </div>
+
+  <div class="status" id="status-display">Status: Idle</div>
+
+  <div class="section" id="assisted-controls" style="display: none; background: #fff3cd; border: 1px solid #ffeeba;">
+    <label>⚠️ Assisted Mode (Manual Override)</label>
+    <p style="font-size: 11px;">The automation failed or needs help. Please manually copy the prompt below, paste it into the AI, and paste the AI's response here.</p>
+    <textarea id="assisted-prompt" readonly style="width: 100%; height: 60px; font-size: 10px;"></textarea>
+    <button id="copy-prompt">Copy Prompt</button>
+    <textarea id="manual-response" placeholder="Paste AI Response here..." style="width: 100%; height: 80px; font-size: 10px; margin-top: 5px;"></textarea>
+    <button id="submit-manual">Submit Response</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

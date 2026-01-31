@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "LLM Debate Orchestrator",
+  "version": "1.0.0",
+  "description": "Orchestrate debates between ChatGPT, Claude, and Gemini.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background/service_worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "content/overlay.js",
+        "content/selector_engine.js",
+        "content/calibration.js",
+        "content/adapters/base_adapter.js",
+        "content/adapters/chatgpt_adapter.js",
+        "content/adapters/claude_adapter.js",
+        "content/adapters/gemini_adapter.js",
+        "content/main.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/selectors.json"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

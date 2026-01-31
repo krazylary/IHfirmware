@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debate Dashboard</title>
+  <style>
+    body { display: flex; height: 100vh; margin: 0; font-family: monospace; }
+    #sidebar { width: 250px; background: #f0f0f0; border-right: 1px solid #ccc; padding: 10px; overflow-y: auto; }
+    #main { flex: 1; padding: 20px; overflow-y: auto; }
+    .debate-item { cursor: pointer; padding: 5px; margin-bottom: 5px; background: #fff; border: 1px solid #ddd; }
+    .debate-item:hover { background: #e0e0e0; }
+    pre { white-space: pre-wrap; background: #f9f9f9; padding: 10px; border: 1px solid #eee; }
+    .status-active { color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <h3>History</h3>
+    <div id="debate-list"></div>
+  </div>
+  <div id="main">
+    <h2 id="current-topic">Select a debate...</h2>
+    <div id="live-status"></div>
+    <div id="debate-content"></div>
+  </div>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:3000');
+
+    ws.onopen = () => {
+      console.log('Connected to server');
+      ws.send(JSON.stringify({ type: 'REGISTER_DASHBOARD' }));
+    };
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === 'STATE_UPDATE') {
+        renderLiveState(msg.payload);
+      }
+    };
+
+    function renderLiveState(state) {
+      document.getElementById('current-topic').innerText = `LIVE: ${state.topic || 'Unknown'}`;
+      document.getElementById('live-status').innerHTML = `State: <span class="status-active">${state.state}</span>`;
+      document.getElementById('debate-content').innerHTML = `<pre>${JSON.stringify(state, null, 2)}</pre>`;
+    }
+
+    // Load history
+    fetch('/api/debates')
+      .then(res => res.json())
+      .then(debates => {
+        const list = document.getElementById('debate-list');
+        debates.forEach(d => {
+          const div = document.createElement('div');
+          div.className = 'debate-item';
+          div.innerText = `${d.timestamp} - ${d.topic}`;
+          div.onclick = () => loadDebate(d.id);
+          list.appendChild(div);
+        });
+      });
+
+    function loadDebate(id) {
+      fetch(`/api/debates/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          renderLiveState(data);
+          document.getElementById('current-topic').innerText = `ARCHIVE: ${data.topic}`;
+        });
+    }
+  </script>
+</body>
+</html>

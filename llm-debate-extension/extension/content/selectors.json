@@ -1,0 +1,20 @@
+{
+  "chatgpt.com": {
+    "input": ["#prompt-textarea", "textarea[data-id='root']", "div[contenteditable='true']"],
+    "send": ["button[data-testid='send-button']", "button[aria-label='Send prompt']"],
+    "stop": ["button[aria-label='Stop generating']"],
+    "lastMessage": ["div[data-message-author-role='assistant']:last-of-type"]
+  },
+  "claude.ai": {
+    "input": ["div[contenteditable='true'][aria-label='Write a message']", "fieldset textarea"],
+    "send": ["button[aria-label='Send Message']", "button:has(svg)"],
+    "stop": ["button:contains('Stop')"],
+    "lastMessage": ["div.font-claude-message:last-of-type"]
+  },
+  "gemini.google.com": {
+    "input": ["rich-textarea > div[contenteditable='true']", "div[role='textbox']"],
+    "send": ["button[aria-label='Send message']", "button.send-button"],
+    "stop": ["button[aria-label='Stop response']"],
+    "lastMessage": ["model-response:last-of-type"]
+  }
+}
